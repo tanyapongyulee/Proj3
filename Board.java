@@ -62,6 +62,7 @@ public class Board {
 	}
 	public void move(Block b){
 		//duh
+		// need to check if the move has been made before
 	}
 	
 	
