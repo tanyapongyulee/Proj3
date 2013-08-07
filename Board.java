@@ -6,6 +6,7 @@ public class Board {
 	private int BoardLength;
 	private int BoardWidth;
 	private Block[][] board;
+	private HashSet availMove;
 	public Board(String fileName){
 		 file=new InputSource(fileName);	//initializes the file name.	
 	}
@@ -58,13 +59,39 @@ public class Board {
 	}
 	public HashSet moveOk(){
 		// return a set of available blocks to move;
-		return new HashSet();
+		
+		return availMove;
 	}
-	public void move(Block b){
-		//duh
-		// need to check if the move has been made before
+	public void move(Block b, int a ){
+		for(Block[] BColumn:board){
+			for(Block B:BColumn){
+				if(B.equals(b) && availMove.contains(B)){
+				//MOVE
+				}
+			}
+		}
+			System.out.println("a"+" "+"b"+" "+"c"+" "+"d");
+		
+	}
+	public boolean compare(String FileName){
+		Board goal= new Board(FileName);
+		goal.board= new Block[BoardLength][BoardWidth];
+		goal.placeBlocks();
+		for(int k=0;k<BoardLength;k++){
+			for(int j=0; j<BoardWidth; j++){
+				if(goal.board[k][j]!=null){
+					if(goal.board[k][j].getSize()!=(this.board[k][j].getSize()))
+						return false;
+				}
+			}
+			
+		}
+		return true;
 	}
 	
+	public boolean isOkay(){
+		return false;
+	}
 	
 	public boolean possible(Board b2){
 		//using A*algorithm to compute
