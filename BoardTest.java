@@ -3,7 +3,7 @@ import junit.framework.TestCase;
 
 import org.junit.Test;
 
-
+// test avail block to move
 public class BoardTest extends TestCase {
 
 	public void testBoard(){
@@ -12,6 +12,7 @@ public class BoardTest extends TestCase {
 		int [] c = b.getSize();
 		assertTrue(4 == c[1]);
 		assertTrue(4==c[0]);
+		
 		
 		Board g = new Board("140x140.txt");
 		g.buildBoard();
@@ -31,6 +32,67 @@ public class BoardTest extends TestCase {
 		b2.buildBoard();
 		b2.placeBlocks();
 		System.out.println(b2.printBoard());
+	}
+	
+	public void testMoveUp(){
+		Board b1=new Board("easy.txt");
+		b1.buildBoard();
+		b1.placeBlocks();
+		System.out.println(b1.printBoard());
+		
+		Block block1ToMove=b1.board[1][0];
+		b1.moveUp(block1ToMove);
+		System.out.println(b1.printBoard());
+		
+		Block block2ToMove=b1.board[2][3];
+		b1.moveUp(block2ToMove);
+		System.out.println(b1.printBoard());
+		
+		System.out.println("End of testMoveUp.");
+		System.out.println("-------------------");
+		
+	}
+	
+	public void testMoveDown(){
+		Board b1=new Board("easy.txt");
+		b1.buildBoard();
+		b1.placeBlocks();
+		System.out.println(b1.printBoard());
+		
+		Block block1ToMove=b1.board[0][0];
+		b1.moveDown(block1ToMove);
+		System.out.println(b1.printBoard());
+		
+		System.out.println("End of testMoveDown.");
+		System.out.println("-------------------");
+	}
+	
+	public void testMoveRight(){
+		Board b1=new Board("easy.txt");
+		b1.buildBoard();
+		b1.placeBlocks();
+		System.out.println(b1.printBoard());
+		
+		Block block1ToMove=b1.board[0][0];
+		b1.moveRight(block1ToMove);
+		System.out.println(b1.printBoard());
+		
+		System.out.println("End of testMoveRight.");
+		System.out.println("-------------------");
+	}
+	
+	public void testMoveLeft(){
+		Board b1=new Board("easy.txt");
+		b1.buildBoard();
+		b1.placeBlocks();
+		System.out.println(b1.printBoard());
+		
+		Block block1ToMove=b1.board[2][2];
+		b1.moveLeft(block1ToMove);
+		System.out.println(b1.printBoard());
+		
+		System.out.println("End of testMoveLeft.");
+		System.out.println("-------------------");
 	}
 
 }
