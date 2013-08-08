@@ -202,6 +202,27 @@ public class Board {
 	public int f_value(Block b){
 		return h_value(b)+g_value(b);
 	}
+	public boolean isok(){
+		if (board.Length<0 || board.Width<0){
+			return false;
+		}
+		if (emptyBlocks.number<1){
+			return false;
+		}
+		if (board.Length == null || board.Width ==null){
+			return false;
+		}
+		if (blocks.sizes > block.goal){
+			return false;
+		}
+		if (block.sizes<block.goal){
+			return false;
+		}
+		if (availMove.isEmpty()){
+			return false;
+		}
+		return true;
+	}
 	
 	public static void main(String[] args){
 		Board b= new Board("easy.txt");
