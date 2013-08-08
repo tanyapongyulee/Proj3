@@ -95,9 +95,7 @@ public class Board {
 	}
 	
 	public void moveDown(Block b){
-		if(!availMove.contains(b)){
-			throw new IllegalArgumentException("unavailable to move");
-		}
+		
 		Point newTop=new Point(b.Top.x+1,b.Top.y);
 		Point newBottom=new Point(b.Bottom.x+1,b.Bottom.y);
 		for(int k=newTop.x; k<newBottom.x+1;k++){
@@ -113,9 +111,7 @@ public class Board {
 	}
 	
 	public void moveLeft(Block b){
-		if(!availMove.contains(b)){
-			throw new IllegalArgumentException("unavailable to move");
-		}
+		
 		Point newTop=new Point(b.Top.x,b.Top.y-1);
 		Point newBottom=new Point(b.Bottom.x,b.Bottom.y-1);
 		for(int k=newTop.x; k<newBottom.x+1;k++){
@@ -130,10 +126,8 @@ public class Board {
 		b.setBottom(newBottom.x, newBottom.y);		
 	}
 	
-	public void movRight(Block b){
-		if(!availMove.contains(b)){
-			throw new IllegalArgumentException("unavailable to move");
-		}
+	public void moveRight(Block b){
+		
 		Point newTop=new Point(b.Top.x,b.Top.y+1);
 		Point newBottom=new Point(b.Bottom.x,b.Bottom.y+1);
 		for(int k=newTop.x; k<newBottom.x+1;k++){
