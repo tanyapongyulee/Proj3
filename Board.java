@@ -7,7 +7,7 @@ public class Board {
 	private InputSource file;
 	private int BoardLength;
 	private int BoardWidth;	
-	private HashSet<Block> availMove;
+	private HashSet<Point> availMove;
 	public Board(String fileName){
 		 file=new InputSource(fileName);	//initializes the file name.	
 	}
@@ -48,6 +48,16 @@ public class Board {
 			input=file.readLine();
 			
 		}
+		for(int k=0; k<BoardLength;k++){
+			for(int j=0; j<BoardWidth; j++){
+				if(board[k][j]==null){
+					Block b= new Block();
+					b.setTop(k, j);
+					board[k][j]=b;
+				}
+			}
+		}
+		//moveOk();
 	}
 	public String printBoard(){
 		String s="";
@@ -65,17 +75,23 @@ public class Board {
 		//return the null blocks onBoard
 		return 0;
 	}
-	public void moveOk(){  // return a set of available blocks to move;
-		for(Block[] bRow:board){
+	
+	public void emptyBlocks(){  // update a set of available blocks to move;
+		availMove= new HashSet <Point>();
+		for (Block[] bRow:board ){
 			for(Block block:bRow){
-				if(block==null){
-					availMove.add(block);
-					System.out.print(block.toString());
+				if(block.toString()==("empty")){
+					availMove.add(block.Top);
+				}
 				}
 			}
 		}
-		
+	public boolean moveOk(Block b){ // check if a block is available to move
+		emptyBlocks();
+		return availMove.contains(b.Top);
 	}
+		
+	
 	public void moveUp(Block b){
 		if(!availMove.contains(b)){
 			throw new IllegalArgumentException("unavailable to move");
@@ -88,7 +104,9 @@ public class Board {
 					}
 				}
 		for(int k=newTop.y; k<newBottom.y+1; k++){
-			board[b.Bottom.x][k]=null;
+			Block empty=new Block();
+			empty.setTop(b.Bottom.x, k);
+			board[b.Bottom.x][k]=empty;
 			}
 		b.setTop(newTop.x, newTop.y);
 		b.setBottom(newBottom.x, newBottom.y);		
@@ -99,13 +117,17 @@ public class Board {
 		Point newTop=new Point(b.Top.x+1,b.Top.y);
 		Point newBottom=new Point(b.Bottom.x+1,b.Bottom.y);
 		for(int k=newTop.x; k<newBottom.x+1;k++){
-					for(int j=newTop.y; j<newBottom.y+1; j++){
-						board[k][j]=b;
-					}
-				}
-		for(int k=newTop.y; k<newBottom.y+1; k++){
-			board[b.Top.x][k]=null;
+			for(int j=newTop.y; j<newBottom.y+1; j++){
+				board[k][j]=b;
 			}
+		}
+		
+		for(int k=newTop.y; k<newBottom.y+1; k++){
+			Block empty=new Block();
+			empty.setTop(b.Top.x, k);
+			board[b.Top.x][k]=empty;
+		}
+		
 		b.setTop(newTop.x, newTop.y);
 		b.setBottom(newBottom.x, newBottom.y);		
 	}
@@ -120,7 +142,9 @@ public class Board {
 					}
 				}
 		for(int k=newTop.x; k<newBottom.x+1; k++){
-			board[k][b.Bottom.y]=null;
+			Block empty=new Block();
+			empty.setTop(k,b.Bottom.y);
+			board[k][b.Bottom.y]=empty;
 			}
 		b.setTop(newTop.x, newTop.y);
 		b.setBottom(newBottom.x, newBottom.y);		
@@ -136,7 +160,9 @@ public class Board {
 					}
 				}
 		for(int k=newTop.x; k<newBottom.x+1; k++){
-			board[k][b.Top.y]=null;
+			Block empty=new Block();
+			empty.setTop(k,b.Top.y);
+			board[k][b.Top.y]=empty;
 			}
 		b.setTop(newTop.x, newTop.y);
 		b.setBottom(newBottom.x, newBottom.y);		
@@ -179,10 +205,13 @@ public class Board {
 	
 	public static void main(String[] args){
 		Board b= new Board("easy.txt");
+		
 		b.buildBoard();	
-		int [] c = b.getSize();
-		b.moveOk();
-		System.out.print(b.availMove);
+		b.placeBlocks();
+	
+		System.out.println(b.moveOk(b.board[0][2]));
+		System.out.println(b.moveOk(b.board[1][3]));
+		System.out.print(b.moveOk(b.board[0][0]));
 	}
 }
 
