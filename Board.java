@@ -1,12 +1,13 @@
+import java.awt.Point;
 import java.util.HashSet;
 
 
 public class Board {
+	public Block[][] board;
 	private InputSource file;
 	private int BoardLength;
-	private int BoardWidth;
-	private Block[][] board;
-	private HashSet availMove;
+	private int BoardWidth;	
+	private HashSet<Block> availMove;
 	public Board(String fileName){
 		 file=new InputSource(fileName);	//initializes the file name.	
 	}
@@ -30,11 +31,17 @@ public class Board {
 		while(input!=null){
 			String[] v= (String[]) input.split(" ");
 			String name=v[0]+v[1]+v[2]+v[3];
-			int w1 =Integer.parseInt(v[3])- Integer.parseInt(v[1]);
-			int l1 =Integer.parseInt(v[2]) - Integer.parseInt(v[0]);
+			int value1=Integer.parseInt(v[0]);
+			int value2=Integer.parseInt(v[1]);
+			int value3=Integer.parseInt(v[2]);
+			int value4=Integer.parseInt(v[3]);
+			int w1 =value4-value2;
+			int l1 =value3-value1;
 			Block b= new Block(w1,l1, name);
-			for(int k=Integer.parseInt(v[0]); k<Integer.parseInt(v[2])+1;k++){
-				for(int j=Integer.parseInt(v[1]); j<Integer.parseInt(v[3])+1; j++){
+			b.setTop(value1,value2);
+			b.setBottom(value3,value4);
+			for(int k=value1; k<value3+1;k++){
+				for(int j=value2; j<value4+1; j++){
 					board[k][j]=b;
 				}
 			}
@@ -54,25 +61,93 @@ public class Board {
 	}
 	
 	public int getEmptyBlocks(){ 
+		
 		//return the null blocks onBoard
 		return 0;
 	}
-	public HashSet moveOk(){
-		// return a set of available blocks to move;
-		
-		return availMove;
-	}
-	public void move(Block b, int a ){
-		for(Block[] BColumn:board){
-			for(Block B:BColumn){
-				if(B.equals(b) && availMove.contains(B)){
-				//MOVE
+	public void moveOk(){  // return a set of available blocks to move;
+		for(Block[] bRow:board){
+			for(Block block:bRow){
+				if(block==null){
+					availMove.add(block);
+					System.out.print(block.toString());
 				}
 			}
 		}
-			System.out.println("a"+" "+"b"+" "+"c"+" "+"d");
 		
 	}
+	public void moveUp(Block b){
+		if(!availMove.contains(b)){
+			throw new IllegalArgumentException("unavailable to move");
+		}
+		Point newTop=new Point(b.Top.x-1,b.Top.y);
+		Point newBottom=new Point(b.Bottom.x-1,b.Bottom.y);
+		for(int k=newTop.x; k<newBottom.x+1;k++){
+					for(int j=newTop.y; j<newBottom.y+1; j++){
+						board[k][j]=b;
+					}
+				}
+		for(int k=newTop.y; k<newBottom.y+1; k++){
+			board[b.Bottom.x][k]=null;
+			}
+		b.setTop(newTop.x, newTop.y);
+		b.setBottom(newBottom.x, newBottom.y);		
+	}
+	
+	public void moveDown(Block b){
+		if(!availMove.contains(b)){
+			throw new IllegalArgumentException("unavailable to move");
+		}
+		Point newTop=new Point(b.Top.x+1,b.Top.y);
+		Point newBottom=new Point(b.Bottom.x+1,b.Bottom.y);
+		for(int k=newTop.x; k<newBottom.x+1;k++){
+					for(int j=newTop.y; j<newBottom.y+1; j++){
+						board[k][j]=b;
+					}
+				}
+		for(int k=newTop.y; k<newBottom.y+1; k++){
+			board[b.Top.x][k]=null;
+			}
+		b.setTop(newTop.x, newTop.y);
+		b.setBottom(newBottom.x, newBottom.y);		
+	}
+	
+	public void moveLeft(Block b){
+		if(!availMove.contains(b)){
+			throw new IllegalArgumentException("unavailable to move");
+		}
+		Point newTop=new Point(b.Top.x,b.Top.y-1);
+		Point newBottom=new Point(b.Bottom.x,b.Bottom.y-1);
+		for(int k=newTop.x; k<newBottom.x+1;k++){
+					for(int j=newTop.y; j<newBottom.y+1; j++){
+						board[k][j]=b;
+					}
+				}
+		for(int k=newTop.x; k<newBottom.x+1; k++){
+			board[k][b.Bottom.y]=null;
+			}
+		b.setTop(newTop.x, newTop.y);
+		b.setBottom(newBottom.x, newBottom.y);		
+	}
+	
+	public void movRight(Block b){
+		if(!availMove.contains(b)){
+			throw new IllegalArgumentException("unavailable to move");
+		}
+		Point newTop=new Point(b.Top.x,b.Top.y+1);
+		Point newBottom=new Point(b.Bottom.x,b.Bottom.y+1);
+		for(int k=newTop.x; k<newBottom.x+1;k++){
+					for(int j=newTop.y; j<newBottom.y+1; j++){
+						board[k][j]=b;
+					}
+				}
+		for(int k=newTop.x; k<newBottom.x+1; k++){
+			board[k][b.Top.y]=null;
+			}
+		b.setTop(newTop.x, newTop.y);
+		b.setBottom(newBottom.x, newBottom.y);		
+	}
+	
 	public boolean compare(String FileName){
 		Board goal= new Board(FileName);
 		goal.board= new Block[BoardLength][BoardWidth];
@@ -96,6 +171,24 @@ public class Board {
 	public boolean possible(Board b2){
 		//using A*algorithm to compute
 		return false;
+	}
+	
+	public int h_value(Block b){
+		return 0;
+	}
+	public int g_value(Block b){
+		return 0;
+	}
+	public int f_value(Block b){
+		return h_value(b)+g_value(b);
+	}
+	
+	public static void main(String[] args){
+		Board b= new Board("easy.txt");
+		b.buildBoard();	
+		int [] c = b.getSize();
+		b.moveOk();
+		System.out.print(b.availMove);
 	}
 }
 
