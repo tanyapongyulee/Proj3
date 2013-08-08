@@ -57,7 +57,7 @@ public class Board {
 				}
 			}
 		}
-		//moveOk();
+
 	}
 	public String printBoard(){
 		String s="";
