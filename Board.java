@@ -5,10 +5,9 @@ import java.util.HashSet;
 
 public class Board {
 	public Block[][] board;
-	public InputSource file;
+	private InputSource file;
 	private int BoardLength;
 	private int BoardWidth;	
-	private HashMap compare;
 	private HashSet<Point> availMove;
 	public Board(String fileName){
 		 file=new InputSource(fileName);	//initializes the file name.	
@@ -203,31 +202,26 @@ public class Board {
 	public int f_value(Block b){
 		return h_value(b)+g_value(b);
 	}
-	
-	public Board createGoalBoard(String FileName){     // this method is not working. cant find the bug.
+	/*
+	public Board createGoalBoard(String FileName){
 		Board goal=new Board(FileName);
-		goal.board=new Block[this.BoardLength][this.BoardWidth];
+		goal.board=new Block[BoardLength][BoardWidth];
 		goal.placeBlocks();
-		String s="";                                       // can ignore this part, just trying to see if it works
-		for (int k = 0; k<goal.BoardLength; k++ ){
-			for(int j =0; j<goal.BoardWidth; j++){
-				s= s+"["+ goal.board[k][j]+"]"+" ";
-				System.out.println("hi");
-			}
-			s=s+"\n";
-		}
-		System.out.println(s);
 		return goal;
 	}
+	*/
 	
 
 	public boolean matchGoal(Board init, Board goal){
+		HashMap<Integer, String> compare = new HashMap<Integer,String>();
 		int count = 0;
 		for (int k = 0; k<init.BoardLength; k++){
 			for (int j = 0; j<init.BoardWidth; j++){
 				Block block = init.board[k][j];
+				System.out.println(block.toString());
 				if(!block.toString().equals("null")){
-					compare.put(10*k+j, block.toString());
+					compare.put((Integer)(10*k+j), block.toString());
+					System.out.println(compare.get(10*k+j));
 				}
 			}
 		}
@@ -251,7 +245,7 @@ public class Board {
 		}
 
 	}
-	
+	/*
 	public static void main(String[] args){
 		Board b= new Board("easy.txt");
 		
@@ -264,5 +258,6 @@ public class Board {
 		System.out.print(b.moveOk(b.board[0][0]));
 		
 	}
+	*/
 }
 
