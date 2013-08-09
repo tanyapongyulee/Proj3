@@ -26,27 +26,27 @@ public class BoardTest extends TestCase {
 		Board b1=new Board("easy.txt");
 		b1.buildBoard();
 		b1.placeBlocks();
-		System.out.println(b1.printBoard());
+		b1.printBoard();
 		
 		Board b2 = new Board("easy2.txt");
 		b2.buildBoard();
 		b2.placeBlocks();
-		System.out.println(b2.printBoard());
+		b2.printBoard();
 	}
 	
 	public void testMoveUp(){
 		Board b1=new Board("easy.txt");
 		b1.buildBoard();
 		b1.placeBlocks();
-		System.out.println(b1.printBoard());
-		
+		b1.printBoard();
 		Block block1ToMove=b1.board[1][0];
+		assertFalse(b1.moveOk(b1.board[1][0]));
 		b1.moveUp(block1ToMove);
-		System.out.println(b1.printBoard());
+		b1.printBoard();
 		
 		Block block2ToMove=b1.board[2][3];
 		b1.moveUp(block2ToMove);
-		System.out.println(b1.printBoard());
+		b1.printBoard();
 		
 		System.out.println("End of testMoveUp.");
 		System.out.println("-------------------");
@@ -57,11 +57,11 @@ public class BoardTest extends TestCase {
 		Board b1=new Board("easy.txt");
 		b1.buildBoard();
 		b1.placeBlocks();
-		System.out.println(b1.printBoard());
+		b1.printBoard();
 		
 		Block block1ToMove=b1.board[0][0];
 		b1.moveDown(block1ToMove);
-		System.out.println(b1.printBoard());
+		b1.printBoard();
 		
 		System.out.println("End of testMoveDown.");
 		System.out.println("-------------------");
@@ -71,11 +71,11 @@ public class BoardTest extends TestCase {
 		Board b1=new Board("easy.txt");
 		b1.buildBoard();
 		b1.placeBlocks();
-		System.out.println(b1.printBoard());
+		b1.printBoard();
 		
 		Block block1ToMove=b1.board[0][0];
 		b1.moveRight(block1ToMove);
-		System.out.println(b1.printBoard());
+		b1.printBoard();
 		
 		System.out.println("End of testMoveRight.");
 		System.out.println("-------------------");
@@ -85,14 +85,24 @@ public class BoardTest extends TestCase {
 		Board b1=new Board("easy.txt");
 		b1.buildBoard();
 		b1.placeBlocks();
-		System.out.println(b1.printBoard());
+		b1.printBoard();
 		
 		Block block1ToMove=b1.board[2][2];
 		b1.moveLeft(block1ToMove);
-		System.out.println(b1.printBoard());
+		b1.printBoard();
 		
 		System.out.println("End of testMoveLeft.");
 		System.out.println("-------------------");
+	}
+	public void testMatchGoal(){
+		Board b1=new Board("easy.txt");
+		b1.buildBoard();
+		b1.placeBlocks();
+		Board bSame=new Board("easy.txt");
+		bSame.buildBoard();
+		bSame.placeBlocks();	
+		assertTrue(b1.matchGoal(b1,bSame));
+				
 	}
 
 }
