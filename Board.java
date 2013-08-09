@@ -66,8 +66,8 @@ public class Board {
 			}
 		}
 		
-		for (int i = 0; i<init.BoardLength; i++){
-			for (int r = 0; r<init.BoardWidth; r++){
+		for (int i = 0; i<goal.BoardLength; i++){
+			for (int r = 0; r<goal.BoardWidth; r++){
 				Block blocktwo = goal.board[i][r];
 				if(!blocktwo.toString().equals("null")){
 					count ++;
