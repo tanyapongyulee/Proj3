@@ -1,16 +1,23 @@
 
+import java.awt.Point;
+import java.util.*;
 public class Block{
-	private int width;
-	private int length;
+	private int width; //horizontal
+	private int length; //vertical
 	private int size;
 	private String name;
+	public Point Top; // x vertical, y horizontal
+	public Point Bottom; // x vertical, y horizontal
 	
-	public Block(int w, int l, String s){
+	
+	public Block(int w, int l){
 		width=w;
 		length=l;
 		size=w*l;
-		name=s;
+		
+		
 	}
+	
 	public int getWidth(){
 		return width;
 	}
@@ -18,9 +25,22 @@ public class Block{
 		return length;
 	}
 	public int getSize(){
-		return size+1;
+		return size;
 	}
-
+	public void setTop(int x, int y){
+		Top= new Point(x,y);
+	}
+	
+	public Point getTop(){
+		return Top;
+	}
+	
+	public void setBottom(int x, int y){
+		Bottom= new Point(x,y);
+	}
+	public Point getBottom(){
+		return Bottom;
+	}
 	public String toString(){
 		return name;
 	}
