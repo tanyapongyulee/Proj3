@@ -22,6 +22,13 @@ public class Board {
 		BoardWidth=W1;
 		board=new Block[BoardLength][BoardWidth];
 	}
+	
+	public void buildGoalBoard(Board init){
+		BoardLength = init.BoardLength;
+		BoardWidth = init.BoardWidth;
+		board = new Block [BoardLength][BoardWidth];
+	}
+	
 	public int[] getSize(){ //returns the parameters of the board, length in index 0, width in index 1.
 		int[] size = new int [2];
 		size[0] = BoardLength;
