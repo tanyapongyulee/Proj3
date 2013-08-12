@@ -183,6 +183,7 @@ public class Board {
 		return h_value(b)+g_value(b);
 	}
 	
+	/*
 	public Board createGoalBoard(String FileName){     // this method is not working. cant find the bug.
 		Board goal=new Board(FileName);
 		goal.board=new Block[this.BoardLength][this.BoardWidth];
@@ -198,6 +199,7 @@ public class Board {
 		System.out.println(s);
 		return goal;
 	}
+	*/
 	
 
 	public boolean matchGoal(Board goal){
