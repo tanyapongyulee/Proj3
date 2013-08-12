@@ -1,274 +1,93 @@
-import java.awt.List;
 import java.awt.Point;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 
 
-public class Board {
-	public Block[][] board;
-	public InputSource file;
-	private int BoardLength;
-	private int BoardWidth;	
-	public Board(String fileName){
-		 file=new InputSource(fileName);	//initializes the file name.	
+public class aStar {
+	//private ArrayList<Block> evaluated;
+	//private ArrayList<Block> open;
+	//private ArrayList<String> move;
+	private ArrayList<Block> Need;
+	public aStar(){
+		
 	}
-	public void buildBoard(){   //returns a 2d array of block objects all initialized to empty. 
-		String s =file.readLine();
-		String[] v = (String[]) s.split(" ");
-		int  L1= Integer.parseInt(v[0]);
-		int  W1= Integer.parseInt(v[1]);
-		BoardLength=L1;
-		BoardWidth=W1;
-		board=new Block[BoardLength][BoardWidth];
+	protected Board match(Board goal,Board board){
+		int p = goal.Goal.size();
+		int size = goal.Goal.get(p-1).getSize();//for later use when multiple blocks come into play.
+		boolean d = true;
+		boolean c = true;
+		Board finished=null;
+		while(d){
+			int t =0;
+			while(t<board.getLength()){
+				int k =0 ;
+				while(k<board.getWidth()){
+					if(board.board[t][k].getSize()==size){
+						finished = greedySearch(board.board[t][k],goal.Goal.get(0),board);//sends a block, and a goal block
+						d=false;
+						t=board.getLength();
+						k=board.getWidth();
+				}
+					k++;
+			}
+				
+			}
+			t++;
+		}
+		return finished;
 	}
-	
-	public void buildGoalBoard(Board init){
-		BoardLength = init.BoardLength;
-		BoardWidth = init.BoardWidth;
-		board = new Block [BoardLength][BoardWidth];
-	}
-	
-	public int[] getSize(){ //returns the parameters of the board, length in index 0, width in index 1.
-		int[] size = new int [2];
-		size[0] = BoardLength;
-		size[1] = BoardWidth;
-		return size;
-	}
-	public void placeBlocks(){
-		String input = file.readLine();
-		while(input!=null){
-			String[] v= (String[]) input.split(" ");
-			String name=v[0]+v[1]+v[2]+v[3];
-			int value1=Integer.parseInt(v[0]);
-			int value2=Integer.parseInt(v[1]);
-			int value3=Integer.parseInt(v[2]);
-			int value4=Integer.parseInt(v[3]);
-			int w1 =value4-value2;
-			int l1 =value3-value1;
-			Block b= new Block(w1,l1, name);
-			b.setTop(value1,value2);
-			b.setBottom(value3,value4);
-			
-			for(int k=value1; k<value3+1;k++){
-				for(int j=value2; j<value4+1; j++){
-					board[k][j]=b;
+	protected static Board greedySearch(Block Start,Block goal,Board board){
+		int current;
+		int h = heuristic(Start.getTop(),goal.getTop());
+		while(!done(Start,goal)){ //keeps moving block until finished
+			ArrayList<Point> avail = Start.availBlock();
+			int temp = h;
+			int i = 0;
+			while(temp==h){ //finds a block with low heuristics
+				if(h>heuristic(avail.get(i),goal.getTop())){
+					temp = heuristic(avail.get(i),goal.getTop());
+				}
+				i++;
+			}
+			h= temp;
+			int relativeY= Start.getTop().y-avail.get(i).y;//distinguished the position of goal relative to thye goal block
+			int relativeX= Start.getTop().x-avail.get(i).x;
+			if(relativeY<0){
+				board.moveUp(Start);	//bnch of if statements that moves the block closer to goal.
+				if(relativeX<0){
+					board.moveLeft(Start);
+				}
+				else if (relativeX>0){
+					board.moveRight(Start);
 				}
 			}
-			input=file.readLine();
-			
-		}
-		
-	}
-	
-	
-	public void printBoard(){
-		String s="";
-		for (int k = 0; k<BoardLength; k++ ){
-			for(int j =0; j<BoardWidth; j++){
-				s= s+"["+ board[k][j]+"]"+" ";
-			}
-			s=s+"\n";
-		}
-		System.out.println(s);
-		
-	}
-	
-	public ArrayList<Point> okayMoves(Block b){ // update the avail coordinates for a specific block to move.	
-		boolean checkUp=true, checkDown=true, checkLeft=true, checkRight=true;
-		ArrayList <Point> availblock= new ArrayList<Point>();
-		for (int t=0;t<b.getWidth();t++){ // up		
-			if(board[b.getTop().x-1][b.getTop().y+t]!=null){
-				checkUp=false;
-			}
-			if(board[b.getTop().x+b.getLength()][b.getTop().y+t]!=null){
-				checkDown=false;
-			}
-			
-		}
-		for(int t=0;t<b.getLength();t++){		
-			if(board[b.getTop().x+t][b.getTop().y-1]!=null){
-				checkLeft=false;
-			}
-			if(board[b.getTop().x+t][b.getTop().y+b.getWidth()]!=null){
-				checkRight=false;
-			}
-		}
-		if(checkUp==true){
-			availblock.add(new Point(b.getTop().x-1,b.getTop().y));
-		}
-		if(checkDown=true){
-			availblock.add(new Point(b.getTop().x+1,b.getTop().y));
-		}
-		if(checkLeft=true){
-			availblock.add(new Point(b.getTop().x,b.getTop().y-1));
-		}
-		if(checkRight=true){
-			availblock.add(new Point(b.getTop().x,b.getTop().y+1));
-		}
-		return availblock; 
-	}
-	
-	/*
-	public void emptyBlocks(){  // update a set of available blocks to move;
-		availMove= new HashSet <Point>();
-		for (Block[] bRow:board ){
-			for(Block block:bRow){
-				if(block.toString()==("empty")){
-					availMove.add(block.Top);
+			else if(relativeY>0){
+				board.moveDown(Start);
+				if(relativeX>0){
+					board.moveRight(Start);
 				}
+				else if (relativeX<0){
+					board.moveLeft(Start);
 				}
 			}
-		}
-	
-	public boolean moveOk(Block b){ // check if a block is available to move
-		emptyBlocks();
-		return availMove.contains(b.Top);
-	}
-	*/
-	
-	public void moveUp(Block b){		
-		Point newTop=new Point(b.Top.x-1,b.Top.y);
-		Point newBottom=new Point(b.Bottom.x-1,b.Bottom.y);
-		
-		for(int k=newTop.x; k<newBottom.x+1;k++){
-					for(int j=newTop.y; j<newBottom.y+1; j++){
-						board[k][j]=b;
-					}
-				}
-		for(int k=newTop.y; k<newBottom.y+1; k++){
-			board[b.Bottom.x][k]=null;
+			else if(relativeX>0){
+				board.moveRight(Start);
 			}
-		b.setTop(newTop.x, newTop.y);
-		b.setBottom(newBottom.x, newBottom.y);		
-	}
-	
-	public void moveDown(Block b){
-		
-		Point newTop=new Point(b.Top.x+1,b.Top.y);
-		Point newBottom=new Point(b.Bottom.x+1,b.Bottom.y);
-		for(int k=newTop.x; k<newBottom.x+1;k++){
-			for(int j=newTop.y; j<newBottom.y+1; j++){
-				board[k][j]=b;
+			else{
+				board.moveLeft(Start);
 			}
 		}
-		
-		for(int k=newTop.y; k<newBottom.y+1; k++){
-			board[b.Top.x][k]=null;
-		}
-		
-		b.setTop(newTop.x, newTop.y);
-		b.setBottom(newBottom.x, newBottom.y);		
+		return board;
 	}
-	
-	public void moveLeft(Block b){
-		
-		Point newTop=new Point(b.Top.x,b.Top.y-1);
-		Point newBottom=new Point(b.Bottom.x,b.Bottom.y-1);
-		
-		for(int k=newTop.x; k<newBottom.x+1;k++){
-					for(int j=newTop.y; j<newBottom.y+1; j++){
-						board[k][j]=b;
-					}
-				}
-		for(int k=newTop.x; k<newBottom.x+1; k++){
-			board[k][b.Bottom.y]=null;
-			}
-		b.setTop(newTop.x, newTop.y);
-		b.setBottom(newBottom.x, newBottom.y);		
-	}
-	
-	public void moveRight(Block b){
-		
-		Point newTop=new Point(b.Top.x,b.Top.y+1);
-		Point newBottom=new Point(b.Bottom.x,b.Bottom.y+1);
-		
-		for(int k=newTop.x; k<newBottom.x+1;k++){
-					for(int j=newTop.y; j<newBottom.y+1; j++){
-						board[k][j]=b;
-					}
-				}
-		for(int k=newTop.x; k<newBottom.x+1; k++){
-			
-			board[k][b.Top.y]=null;
-			}
-		b.setTop(newTop.x, newTop.y);
-		b.setBottom(newBottom.x, newBottom.y);		
-	}
-	
-	
-	
-	
-	public boolean isOkay(){
-		return false;
-	}
-	
-	public boolean possible(Board b2){
-		//using A*algorithm to compute
-		return false;
-	}
-	
-	
-	public int h_value(Block b){
-		return 0;
-	}
-	public int g_value(Block b){
-		return 0;
-	}
-	public int f_value(Block b){
-		return h_value(b)+g_value(b);
-	}
-	
-	/*
-	public Board createGoalBoard(String FileName){     // this method is not working. cant find the bug.
-		Board goal=new Board(FileName);
-		goal.board=new Block[this.BoardLength][this.BoardWidth];
-		goal.placeBlocks();
-		String s="";                                       // can ignore this part, just trying to see if it works
-		for (int k = 0; k<goal.BoardLength; k++ ){
-			for(int j =0; j<goal.BoardWidth; j++){
-				s= s+"["+ goal.board[k][j]+"]"+" ";
-				System.out.println("hi");
-			}
-			s=s+"\n";
-		}
-		System.out.println(s);
-		return goal;
-	}
-	*/
-	
-
-	public boolean matchGoal(Board goal){
-		HashMap<Integer, Block> compare = new HashMap<Integer,Block>();
-		int count = 0;
-		for (int k = 0; k<this.BoardLength; k++){
-			for (int j = 0; j<this.BoardWidth; j++){
-				Block block = this.board[k][j];
-				System.out.println(block.toString());
-				if(!block.toString().equals("null")){
-					compare.put((Integer)(10*k+j), block);
-					System.out.println(compare.get(10*k+j));
-				}
-			}
-		}
-
-		for (int i = 0; i<goal.BoardLength; i++){
-			for (int r = 0; r<goal.BoardWidth; r++){
-				Block blocktwo = goal.board[i][r];
-				if(blocktwo!=null){
-					count ++;
-					if (compare.get(10*i+r).Top.equals(blocktwo.Top) && compare.get(10*i+r).Bottom.equals(blocktwo.Bottom)){
-						count--;
-					}
-				}
-			}
-		}
-
-		if (count==0){
+	private static boolean done(Block Start, Block goal){ //checks if done
+		if(Start.getTop().x==goal.getTop().x&&Start.getTop().y==goal.getTop().y){
 			return true;
-		} else{
-			return false;
 		}
-
+		return false;
 	}
+	protected static int heuristic(Point Start, Point goal){ //the heuristic
+		int h = (int)Math.sqrt(Math.pow(goal.x-Start.x, 2)+Math.pow(goal.y-Start.y, 2));
+		return h;
+	}
+	
+
 }
