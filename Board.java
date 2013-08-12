@@ -10,13 +10,18 @@ public class Board {
 	public InputSource file;
 	private int BoardLength;
 	private int BoardWidth;	
-	private HashMap compare;
 	private HashSet<Point> availMove;
-	private HashMap<String, ArrayList> Track;
 	protected ArrayList<Block> Goal;
 
 	public Board(String fileName){
 		 file=new InputSource(fileName);	//initializes the file name.	
+	}
+	public Board(String fileName, int BLength, int BWidth){ // construct goal-board, skipping other construct board methods
+		BoardLength=BLength;
+		BoardWidth=BWidth;
+		board= new Block[BoardLength][BoardWidth];
+		file= new InputSource(fileName);
+		placeBlocks();	
 	}
 	public void buildBoard(){   //returns a 2d array of block objects all initialized to empty. 
 		String s =file.readLine();
@@ -26,7 +31,6 @@ public class Board {
 		BoardLength=L1;
 		BoardWidth=W1;
 		board=new Block[BoardLength][BoardWidth];
-		Track= new HashMap<String, ArrayList>();
 		Goal = new ArrayList<Block>();
 	}
 	protected int getLength(){
@@ -35,11 +39,11 @@ public class Board {
 	protected int getWidth(){
 		return BoardWidth;
 	}
+	
 	public void placeBlocks(){
 		String input = file.readLine();
 		while(input!=null){
 			String[] v= (String[]) input.split(" ");
-			String name=v[0]+v[1]+v[2]+v[3];
 			int value1=Integer.parseInt(v[0]);
 			int value2=Integer.parseInt(v[1]);
 			int value3=Integer.parseInt(v[2]);
@@ -49,9 +53,6 @@ public class Board {
 			Block b= new Block(w1,l1);
 			b.setTop(value1,value2);
 			b.setBottom(value3,value4);
-			ArrayList<Point> track= new ArrayList<Point>();  // creating a track of path for each block
-			track.add(b.Top);
-			Track.put(name, track);
 			for(int k=value1; k<value3+1;k++){
 				for(int j=value2; j<value4+1; j++){
 					board[k][j]=b;
