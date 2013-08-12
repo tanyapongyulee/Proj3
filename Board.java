@@ -53,6 +53,8 @@ public class Board {
 		}
 		
 	}
+	
+	
 	public void printBoard(){
 		String s="";
 		for (int k = 0; k<BoardLength; k++ ){
@@ -65,6 +67,40 @@ public class Board {
 		
 	}
 	
+	public ArrayList<Point> okayMoves(Block b){ // update the avail coordinates for a specific block to move.	
+		boolean checkUp=true, checkDown=true, checkLeft=true, checkRight=true;
+		ArrayList <Point> availblock= new ArrayList<Point>();
+		for (int t=0;t<b.getWidth();t++){ // up		
+			if(board[b.getTop().x-1][b.getTop().y+t]!=null){
+				checkUp=false;
+			}
+			if(board[b.getTop().x+b.getLength()][b.getTop().y+t]!=null){
+				checkDown=false;
+			}
+			
+		}
+		for(int t=0;t<b.getLength();t++){		
+			if(board[b.getTop().x+t][b.getTop().y-1]!=null){
+				checkLeft=false;
+			}
+			if(board[b.getTop().x+t][b.getTop().y+b.getWidth()]!=null){
+				checkRight=false;
+			}
+		}
+		if(checkUp==true){
+			availblock.add(new Point(b.getTop().x-1,b.getTop().y));
+		}
+		if(checkDown=true){
+			availblock.add(new Point(b.getTop().x+1,b.getTop().y));
+		}
+		if(checkLeft=true){
+			availblock.add(new Point(b.getTop().x,b.getTop().y-1));
+		}
+		if(checkRight=true){
+			availblock.add(new Point(b.getTop().x,b.getTop().y+1));
+		}
+		return availblock; 
+	}
 	
 	/*
 	public void emptyBlocks(){  // update a set of available blocks to move;
