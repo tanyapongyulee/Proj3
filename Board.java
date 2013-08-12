@@ -236,7 +236,6 @@ public class Board {
 		for (int k = 0; k<this.BoardLength; k++){
 			for (int j = 0; j<this.BoardWidth; j++){
 				Block block = this.board[k][j];
-				System.out.println(block.toString());
 				if(block!=null)){
 					compare.put((Integer)(10*k+j), block);
 					System.out.println(compare.get(10*k+j));
