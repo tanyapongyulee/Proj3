@@ -10,9 +10,8 @@ public class Board {
 	public InputSource file;
 	private int BoardLength;
 	private int BoardWidth;	
-	private HashMap compare;
 	private HashSet<Point> availMove;
-	private HashMap<String, ArrayList> Track;
+
 	
 	public Board(String fileName){
 		 file=new InputSource(fileName);	//initializes the file name.	
@@ -25,8 +24,14 @@ public class Board {
 		BoardLength=L1;
 		BoardWidth=W1;
 		board=new Block[BoardLength][BoardWidth];
-		Track= new HashMap<String, ArrayList>();
 	}
+	
+	public void buildGoalBoard(Board init){
+		BoardLength = init.BoardLength;
+		BoardWidth = init.BoardWidth;
+		board = new Block [BoardLength][BoardWidth];
+	}
+	
 	public int[] getSize(){ //returns the parameters of the board, length in index 0, width in index 1.
 		int[] size = new int [2];
 		size[0] = BoardLength;
@@ -47,9 +52,7 @@ public class Board {
 			Block b= new Block(w1,l1, name);
 			b.setTop(value1,value2);
 			b.setBottom(value3,value4);
-			ArrayList<Point> track= new ArrayList<Point>();  // creating a track of path for each block
-			track.add(b.Top);
-			Track.put(name, track);
+
 			for(int k=value1; k<value3+1;k++){
 				for(int j=value2; j<value4+1; j++){
 					board[k][j]=b;
@@ -197,10 +200,7 @@ public class Board {
 		return false;
 	}
 	
-	public boolean possible(Board b2){
-		//using A*algorithm to compute
-		return false;
-	}
+	/*
 	private int distance(Block b, Block[][] Goal){
 		int max=-1;
 		for (Block[] bRow:Goal){
@@ -217,6 +217,8 @@ public class Board {
 		} return max;
 		
 	}
+	*/
+	
 	public int h_value(Block b){
 		return 0;
 	}
@@ -227,30 +229,17 @@ public class Board {
 		return h_value(b)+g_value(b);
 	}
 	
-	public Board createGoalBoard(String FileName){     // this method is not working. cant find the bug.
-		Board goal=new Board(FileName);
-		goal.board=new Block[this.BoardLength][this.BoardWidth];
-		goal.placeBlocks();
-		String s="";                                       // can ignore this part, just trying to see if it works
-		for (int k = 0; k<goal.BoardLength; k++ ){
-			for(int j =0; j<goal.BoardWidth; j++){
-				s= s+"["+ goal.board[k][j]+"]"+" ";
-				System.out.println("hi");
-			}
-			s=s+"\n";
-		}
-		System.out.println(s);
-		return goal;
-	}
 	
-
-	public boolean matchGoal(Board init, Board goal){
+	public boolean matchGoal(Board goal){
+		HashMap<Integer, Block> compare = new HashMap<Integer,Block>();
 		int count = 0;
-		for (int k = 0; k<init.BoardLength; k++){
-			for (int j = 0; j<init.BoardWidth; j++){
-				Block block = init.board[k][j];
+		for (int k = 0; k<this.BoardLength; k++){
+			for (int j = 0; j<this.BoardWidth; j++){
+				Block block = this.board[k][j];
+				System.out.println(block.toString());
 				if(!block.toString().equals("null")){
-					compare.put(10*k+j, block.toString());
+					compare.put((Integer)(10*k+j), block);
+					System.out.println(compare.get(10*k+j));
 				}
 			}
 		}
@@ -258,9 +247,9 @@ public class Board {
 		for (int i = 0; i<goal.BoardLength; i++){
 			for (int r = 0; r<goal.BoardWidth; r++){
 				Block blocktwo = goal.board[i][r];
-				if(!blocktwo.toString().equals("null")){
+				if(blocktwo!=null){
 					count ++;
-					if (compare.get(10*i+r).equals(blocktwo.toString())){
+					if (compare.get(10*i+r).Top.equals(blocktwo.Top) && compare.get(10*i+r).Bottom.equals(blocktwo.Bottom)){
 						count--;
 					}
 				}
@@ -274,6 +263,7 @@ public class Board {
 		}
 
 	}
+
 	
 }
 
