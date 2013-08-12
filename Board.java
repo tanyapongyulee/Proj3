@@ -126,30 +126,27 @@ public class Board {
 		return availMove.contains(b.Top);
 	}
 	*/
-		
-
+	
 	public void moveUp(Block b){		
 		Point newTop=new Point(b.Top.x-1,b.Top.y);
 		Point newBottom=new Point(b.Bottom.x-1,b.Bottom.y);
+		
 		for(int k=newTop.x; k<newBottom.x+1;k++){
-			for(int j=newTop.y; j<newBottom.y+1; j++){
-				board[k][j]=b;
-			}
-		}
+					for(int j=newTop.y; j<newBottom.y+1; j++){
+						board[k][j]=b;
+					}
+				}
 		for(int k=newTop.y; k<newBottom.y+1; k++){
-			Block empty=new Block();
-			empty.setTop(b.Bottom.x, k);
-			board[b.Bottom.x][k]=empty;
-		}
+			board[b.Bottom.x][k]=null;
+			}
 		b.setTop(newTop.x, newTop.y);
-		b.setBottom(newBottom.x, newBottom.y);
+		b.setBottom(newBottom.x, newBottom.y);		
 	}
 	
 	public void moveDown(Block b){
 		
 		Point newTop=new Point(b.Top.x+1,b.Top.y);
 		Point newBottom=new Point(b.Bottom.x+1,b.Bottom.y);
-
 		for(int k=newTop.x; k<newBottom.x+1;k++){
 			for(int j=newTop.y; j<newBottom.y+1; j++){
 				board[k][j]=b;
@@ -157,13 +154,11 @@ public class Board {
 		}
 		
 		for(int k=newTop.y; k<newBottom.y+1; k++){
-			Block empty=new Block();
-			empty.setTop(b.Top.x, k);
-			board[b.Top.x][k]=empty;
+			board[b.Top.x][k]=null;
 		}
 		
 		b.setTop(newTop.x, newTop.y);
-		b.setBottom(newBottom.x, newBottom.y);
+		b.setBottom(newBottom.x, newBottom.y);		
 	}
 	
 	public void moveLeft(Block b){
@@ -177,9 +172,7 @@ public class Board {
 					}
 				}
 		for(int k=newTop.x; k<newBottom.x+1; k++){
-			Block empty=new Block();
-			empty.setTop(k,b.Bottom.y);
-			board[k][b.Bottom.y]=empty;
+			board[k][b.Bottom.y]=null;
 			}
 		b.setTop(newTop.x, newTop.y);
 		b.setBottom(newBottom.x, newBottom.y);		
@@ -196,13 +189,13 @@ public class Board {
 					}
 				}
 		for(int k=newTop.x; k<newBottom.x+1; k++){
-			Block empty=new Block();
-			empty.setTop(k,b.Top.y);
-			board[k][b.Top.y]=empty;
+			
+			board[k][b.Top.y]=null;
 			}
 		b.setTop(newTop.x, newTop.y);
 		b.setBottom(newBottom.x, newBottom.y);		
 	}
+	
 	
 	
 	
