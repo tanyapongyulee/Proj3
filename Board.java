@@ -1,6 +1,8 @@
-
+import java.awt.List;
 import java.awt.Point;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 
 
 public class Board {
@@ -49,15 +51,7 @@ public class Board {
 			input=file.readLine();
 			
 		}
-		for(int k=0; k<BoardLength;k++){
-			for(int j=0; j<BoardWidth; j++){
-				if(board[k][j]==null){
-					Block b= new Block();
-					b.setTop(k, j);
-					board[k][j]=b;
-				}
-			}
-		}
+		
 	}
 	public void printBoard(){
 		String s="";
@@ -206,15 +200,15 @@ public class Board {
 	}
 	
 
-	public boolean matchGoal(Board init, Board goal){
-		HashMap<Integer, String> compare = new HashMap<Integer,String>();
+	public boolean matchGoal(Board goal){
+		HashMap<Integer, Block> compare = new HashMap<Integer,Block>();
 		int count = 0;
-		for (int k = 0; k<init.BoardLength; k++){
-			for (int j = 0; j<init.BoardWidth; j++){
-				Block block = init.board[k][j];
+		for (int k = 0; k<this.BoardLength; k++){
+			for (int j = 0; j<this.BoardWidth; j++){
+				Block block = this.board[k][j];
 				System.out.println(block.toString());
 				if(!block.toString().equals("null")){
-					compare.put((Integer)(10*k+j), block.toString());
+					compare.put((Integer)(10*k+j), block);
 					System.out.println(compare.get(10*k+j));
 				}
 			}
@@ -223,9 +217,9 @@ public class Board {
 		for (int i = 0; i<goal.BoardLength; i++){
 			for (int r = 0; r<goal.BoardWidth; r++){
 				Block blocktwo = goal.board[i][r];
-				if(!blocktwo.toString().equals("null")){
+				if(blocktwo!=null){
 					count ++;
-					if (compare.get(10*i+r).equals(blocktwo.toString())){
+					if (compare.get(10*i+r).Top.equals(blocktwo.Top) && compare.get(10*i+r).Bottom.equals(blocktwo.Bottom)){
 						count--;
 					}
 				}
