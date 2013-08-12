@@ -5,7 +5,6 @@ public class Block{
 	private int width; //horizontal
 	private int length; //vertical
 	private int size;
-	private String name;
 	public Point Top; // x vertical, y horizontal
 	public Point Bottom; // x vertical, y horizontal
 	
@@ -42,6 +41,8 @@ public class Block{
 		return Bottom;
 	}
 	public String toString(){
-		return name;
+		String s="";
+		s=Integer.toString(Top.x)+Integer.toString(Top.y);
+		return s;
 	}
 }
