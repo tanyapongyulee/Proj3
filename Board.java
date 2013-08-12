@@ -112,6 +112,12 @@ public class Board {
 				}
 			}
 		}
+	public int[] getSize(){ //returns the parameters of the board, length in index 0, width in index 1.
+		int[] size = new int [2];
+		size[0] = BoardLength;
+		size[1] = BoardWidth;
+		return size;
+	}
 
 	public ArrayList<Point> okayMoves(Block b){ // update the avail coordinates for a specific block to move.	
 		boolean checkUp=true, checkDown=true, checkLeft=true, checkRight=true;
