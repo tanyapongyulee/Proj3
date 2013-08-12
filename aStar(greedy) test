@@ -1,0 +1,37 @@
+import static org.junit.Assert.*;
+
+import org.junit.Test;
+
+
+public class aStarTest {
+
+  @Test
+	public void testHeuristic() {
+		Board c = new Board("supersimple.txt");
+		c.buildBoard();
+		c.placeBlocks();
+		c.printBoard();
+		aStar a = new aStar();
+		Board d = new Board("supersimplegoal.txt");
+		d.buildBoard();
+		d.placeGoalBlocks();
+		a.match(d, c);
+		assertTrue(true);
+		c.printBoard();
+
+		Board notc = new Board("MediumSuperEasy.txt");
+		notc.buildBoard();
+		notc.placeBlocks();
+		notc.printBoard();
+		aStar nota = new aStar();
+		Board notd = new Board("goalMediumSuperEasy.txt");
+		notd.buildBoard();
+		notd.placeGoalBlocks();
+		nota.match(notd, notc);
+		assertTrue(true);
+		notc.printBoard();
+		
+	}
+	
+
+}
