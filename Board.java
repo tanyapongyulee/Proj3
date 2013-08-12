@@ -86,7 +86,7 @@ public class Board {
 			}
 		}
 	
-	public ArrayList<Point> okayMoves(Block b){ // update the avail coordinates for a specific block to move.	
+	public ArrayList<Point> availBlocks(Block b){ // update the avail coordinates for a specific block to move.	
 		boolean checkUp=true, checkDown=true, checkLeft=true, checkRight=true;
 		ArrayList <Point> availblock= new ArrayList<Point>();
 		for (int t=0;t<b.getWidth();t++){ // up		
