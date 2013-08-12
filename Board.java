@@ -1,8 +1,6 @@
-import java.awt.List;
+
 import java.awt.Point;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 
 
 public class Board {
@@ -10,7 +8,6 @@ public class Board {
 	public InputSource file;
 	private int BoardLength;
 	private int BoardWidth;	
-	private HashMap<String, ArrayList> Track;
 	public Board(String fileName){
 		 file=new InputSource(fileName);	//initializes the file name.	
 	}
@@ -22,7 +19,6 @@ public class Board {
 		BoardLength=L1;
 		BoardWidth=W1;
 		board=new Block[BoardLength][BoardWidth];
-		Track= new HashMap<String, ArrayList>();
 	}
 	public int[] getSize(){ //returns the parameters of the board, length in index 0, width in index 1.
 		int[] size = new int [2];
@@ -44,9 +40,7 @@ public class Board {
 			Block b= new Block(w1,l1, name);
 			b.setTop(value1,value2);
 			b.setBottom(value3,value4);
-			ArrayList<Point> track= new ArrayList<Point>();  // creating a track of path for each block
-			track.add(b.Top);
-			Track.put(name, track);
+			
 			for(int k=value1; k<value3+1;k++){
 				for(int j=value2; j<value4+1; j++){
 					board[k][j]=b;
@@ -96,36 +90,29 @@ public class Board {
 	}
 	*/
 		
-	public ArrayList<Point> getTrack(Block b){
-		return Track.get(b.toString());
-	}
+
 	public void moveUp(Block b){		
 		Point newTop=new Point(b.Top.x-1,b.Top.y);
 		Point newBottom=new Point(b.Bottom.x-1,b.Bottom.y);
-		ArrayList<Point> track=Track.get(b.toString());
-		track.add(newTop);
-		Track.put(b.toString(), track);
 		for(int k=newTop.x; k<newBottom.x+1;k++){
-					for(int j=newTop.y; j<newBottom.y+1; j++){
-						board[k][j]=b;
-					}
-				}
+			for(int j=newTop.y; j<newBottom.y+1; j++){
+				board[k][j]=b;
+			}
+		}
 		for(int k=newTop.y; k<newBottom.y+1; k++){
 			Block empty=new Block();
 			empty.setTop(b.Bottom.x, k);
 			board[b.Bottom.x][k]=empty;
-			}
+		}
 		b.setTop(newTop.x, newTop.y);
-		b.setBottom(newBottom.x, newBottom.y);		
+		b.setBottom(newBottom.x, newBottom.y);
 	}
 	
 	public void moveDown(Block b){
 		
 		Point newTop=new Point(b.Top.x+1,b.Top.y);
 		Point newBottom=new Point(b.Bottom.x+1,b.Bottom.y);
-		ArrayList<Point> track=Track.get(b.toString());
-		track.add(newTop);
-		Track.put(b.toString(), track);
+
 		for(int k=newTop.x; k<newBottom.x+1;k++){
 			for(int j=newTop.y; j<newBottom.y+1; j++){
 				board[k][j]=b;
@@ -139,16 +126,14 @@ public class Board {
 		}
 		
 		b.setTop(newTop.x, newTop.y);
-		b.setBottom(newBottom.x, newBottom.y);		
+		b.setBottom(newBottom.x, newBottom.y);
 	}
 	
 	public void moveLeft(Block b){
 		
 		Point newTop=new Point(b.Top.x,b.Top.y-1);
 		Point newBottom=new Point(b.Bottom.x,b.Bottom.y-1);
-		ArrayList<Point> track=Track.get(b.toString());
-		track.add(newTop);
-		Track.put(b.toString(), track);
+		
 		for(int k=newTop.x; k<newBottom.x+1;k++){
 					for(int j=newTop.y; j<newBottom.y+1; j++){
 						board[k][j]=b;
@@ -167,9 +152,7 @@ public class Board {
 		
 		Point newTop=new Point(b.Top.x,b.Top.y+1);
 		Point newBottom=new Point(b.Bottom.x,b.Bottom.y+1);
-		ArrayList<Point> track=Track.get(b.toString());
-		track.add(newTop);
-		Track.put(b.toString(), track);
+		
 		for(int k=newTop.x; k<newBottom.x+1;k++){
 					for(int j=newTop.y; j<newBottom.y+1; j++){
 						board[k][j]=b;
@@ -256,19 +239,4 @@ public class Board {
 		}
 
 	}
-	
-	public static void main(String[] args){
-		Board b= new Board("easy.txt");
-		
-		b.buildBoard();	
-		b.placeBlocks();
-		;
-		
-		System.out.println(b.moveOk(b.board[0][2]));
-		System.out.println(b.moveOk(b.board[1][3]));
-		System.out.print(b.moveOk(b.board[0][0]));
-		
-		
-	}
 }
-
