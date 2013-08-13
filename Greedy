@@ -11,6 +11,7 @@ public class aStar {
 		
 	}
 	protected Board match(Board goal,Board board){
+		System.out.println(goal.Goal.size());
 		int p = goal.Goal.size();
 		int size = goal.Goal.get(p-1).getSize();//for later use when multiple blocks come into play.
 		boolean d = true;
@@ -43,17 +44,28 @@ public class aStar {
 			int temp = h;
 			int i = 0;
 			while(temp==h&&i<avail.size()){ //finds a block with low heuristics
+				//System.out.println(heuristic(avail.get(i),goal.getTop())+" "+avail.get(i)+" "+h);
 				if(h>heuristic(avail.get(i),goal.getTop())){
 					temp = heuristic(avail.get(i),goal.getTop());
 				}
 				i++;
 			}
-			h= temp;
 			i--;
-			System.out.println(Start.getTop().y+" "+avail.get(i).y);
+			if(h==temp){
+				i=0;
+				while(temp==h&&i<avail.size()){ //finds a block with low heuristics
+					System.out.println(heuristic(avail.get(i),goal.getTop())+" "+avail.get(i)+" "+h);
+					if(h==heuristic(avail.get(i),goal.getTop())){
+						temp = heuristic(avail.get(i),goal.getTop());
+						break;
+					}
+					i++;
+				}
+			}
+			h= temp;
+			System.out.println(i);
 			int relativeY=avail.get(i).y- Start.getTop().y;//distinguished the position of goal relative to thye goal block
 			int relativeX= avail.get(i).x-Start.getTop().x;
-			System.out.println(relativeY + " "+relativeX);
 			if(relativeX<0){
 				board.moveUp(Start);	//bunch of if statements that moves the block closer to goal.
 				if(relativeY<0){
@@ -75,7 +87,7 @@ public class aStar {
 			else if(relativeY>0){
 				board.moveRight(Start);
 			}
-			else{
+			else if(relativeX==0){
 				board.moveLeft(Start);
 			}
 		board.printBoard();
