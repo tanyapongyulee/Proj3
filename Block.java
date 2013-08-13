@@ -18,10 +18,10 @@ public class Block{
 	}
 	
 	public int getWidth(){
-		return width;
+		return width+1;
 	}
 	public int getLength(){
-		return length;
+		return length+1;
 	}
 	public int getSize(){
 		return size;
