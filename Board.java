@@ -123,35 +123,65 @@ public class Board {
 	public ArrayList<Point> okayMoves(Block b){ // update the avail coordinates for a specific block to move.	
 		boolean checkUp=true, checkDown=true, checkLeft=true, checkRight=true;
 		ArrayList <Point> availblock= new ArrayList<Point>();
-		for (int t=0;t<b.getWidth();t++){ // up	
-			if(board[b.getTop().x][b.getTop().y]!=null){
+		for (int t=b.getTop().y;t<b.getWidth()+b.getTop().y;t++){ // up	
+			if(b.getTop().x==0){
+				checkUp=false;
+			}
+			else if(board[b.getTop().x-1][t]!=null){
 				checkUp=false;
 				break;
+				
 			}
-			if(board[b.getTop().x+b.getLength()][b.getTop().y+t]!=null){
-				checkDown=false;
+		}
+		for (int t=b.getTop().y;t<b.getWidth()+b.getTop().y;t++){//down
+			 if(this.getWidth()<1){
+				checkDown = false;
+				checkUp = false;
 				break;
 			}
-
+			 else if(b.getTop().x+b.getLength()==this.BoardLength){
+				 checkDown = false;
+				 break;
+			 }
+			else if (board[b.getTop().x+b.getLength()][t]!=null){
+				checkDown = false;
+				
+			}
 		}
-		for(int t=0;t<b.getLength();t++){		
-			if(board[b.getTop().x+t][b.getTop().y-1]!=null){
+		for(int t=b.getTop().x;t<b.getLength()+b.getTop().x;t++){	//left
+			if(b.getTop().y==0){
+				checkLeft = false;
+			}
+			
+			else if(board[t][b.getTop().y-1]!=null){
 				checkLeft=false;
 			}
-			if(board[b.getTop().x+t][b.getTop().y+b.getWidth()]!=null){
-				checkRight=false;
+			
+		}
+		for(int t=b.getTop().x;t<b.getLength()+b.getTop().x;t++){//right
+			 if (this.getLength()<1){
+				checkLeft= false;
+				checkRight= false;
+				break;
 			}
+			 else if(board[t][b.getTop().y+b.getWidth()]!=null){
+					checkRight=false;
+				}
+			 else if(b.getTop().y+b.getWidth()==this.BoardWidth){
+				 checkRight= false;
+				 break;
+			 }
 		}
 		if(checkUp==true){
 			availblock.add(new Point(b.getTop().x-1,b.getTop().y));
 		}
-		if(checkDown=true){
+		if(checkDown==true){
 			availblock.add(new Point(b.getTop().x+1,b.getTop().y));
 		}
-		if(checkLeft=true){
+		if(checkLeft==true){
 			availblock.add(new Point(b.getTop().x,b.getTop().y-1));
 		}
-		if(checkRight=true){
+		if(checkRight==true){
 			availblock.add(new Point(b.getTop().x,b.getTop().y+1));
 		}
 		return availblock; 
