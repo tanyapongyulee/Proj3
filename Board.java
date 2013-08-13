@@ -21,7 +21,8 @@ public class Board {
 		BoardWidth=BWidth;
 		board= new Block[BoardLength][BoardWidth];
 		file= new InputSource(fileName);
-		placeBlocks();	
+		Goal = new ArrayList<Block>();
+		placeGoalBlocks();	
 	}
 	public void buildBoard(){   //returns a 2d array of block objects all initialized to empty. 
 		String s =file.readLine();
@@ -31,7 +32,7 @@ public class Board {
 		BoardLength=L1;
 		BoardWidth=W1;
 		board=new Block[BoardLength][BoardWidth];
-		Goal = new ArrayList<Block>();
+		
 	}
 	protected int getLength(){
 		return BoardLength;
@@ -164,13 +165,14 @@ public class Board {
 				checkRight= false;
 				break;
 			}
-			 else if(board[t][b.getTop().y+b.getWidth()]!=null){
-					checkRight=false;
-				}
 			 else if(b.getTop().y+b.getWidth()==this.BoardWidth){
 				 checkRight= false;
 				 break;
 			 }
+			 else if(board[t][b.getTop().y+b.getWidth()]!=null){
+					checkRight=false;
+				}
+			 
 		}
 		if(checkUp==true){
 			availblock.add(new Point(b.getTop().x-1,b.getTop().y));
