@@ -40,7 +40,6 @@ public class BoardTest extends TestCase {
 		b1.placeBlocks();
 		b1.printBoard();
 		Block block1ToMove=b1.board[1][0];
-		assertFalse(b1.moveOk(b1.board[1][0]));
 		b1.moveUp(block1ToMove);
 		b1.printBoard();
 		
@@ -101,8 +100,21 @@ public class BoardTest extends TestCase {
 		Board bSame=new Board("easy.txt");
 		bSame.buildBoard();
 		bSame.placeBlocks();	
-		assertTrue(b1.matchGoal(b1,bSame));
+		assertTrue(b1.matchGoal(bSame));
 				
+	}
+	public void testOkayMoves(){
+		Board b1 = new Board("easy.txt");
+		b1.buildBoard();
+		b1.placeBlocks();
+		b1.printBoard();
+		b1.okayMoves(b1.board[2][2]);
+		System.out.println(b1.okayMoves(b1.board[2][2]));
+		
+		Board b2 = new Board("easyGoal.txt",4,4);
+		System.out.println(b2.okayMoves(b2.board[0][0]));
+	
+		b2.printBoard();
 	}
 
 }
