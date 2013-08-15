@@ -11,7 +11,8 @@ public class Board {
 	private int BoardLength;
 	private int BoardWidth;	
 	private HashSet<Point> availMove;
-	protected ArrayList<Block> Goal;
+	protected ArrayList<Block> Goal = new ArrayList<Block>();;
+	protected ArrayList<Block> avail = new ArrayList<Block>();
 
 	public Board(String fileName){
 		 file=new InputSource(fileName);	//initializes the file name.	
@@ -21,7 +22,6 @@ public class Board {
 		BoardWidth=BWidth;
 		board= new Block[BoardLength][BoardWidth];
 		file= new InputSource(fileName);
-		Goal = new ArrayList<Block>();
 		placeGoalBlocks();	
 	}
 	public void buildBoard(){   //returns a 2d array of block objects all initialized to empty. 
@@ -32,7 +32,7 @@ public class Board {
 		BoardLength=L1;
 		BoardWidth=W1;
 		board=new Block[BoardLength][BoardWidth];
-		
+		Goal = new ArrayList<Block>();
 	}
 	protected int getLength(){
 		return BoardLength;
@@ -52,6 +52,7 @@ public class Board {
 			int w1 =value4-value2;
 			int l1 =value3-value1;
 			Block b= new Block(w1,l1);
+			avail.add(b);
 			b.setTop(value1,value2);
 			b.setBottom(value3,value4);
 			for(int k=value1; k<value3+1;k++){
@@ -121,9 +122,9 @@ public class Board {
 		return size;
 	}
 
-	public ArrayList<Point> okayMoves(Block b){ // update the avail coordinates for a specific block to move.	
+	public ArrayList<String> okayMoves(Block b){ // update the avail coordinates for a specific block to move.	
 		boolean checkUp=true, checkDown=true, checkLeft=true, checkRight=true;
-		ArrayList <Point> availblock= new ArrayList<Point>();
+		ArrayList <String> availblock= new ArrayList<String>();
 		for (int t=b.getTop().y;t<b.getWidth()+b.getTop().y;t++){ // up	
 			if(b.getTop().x==0){
 				checkUp=false;
@@ -144,7 +145,7 @@ public class Board {
 				 checkDown = false;
 				 break;
 			 }
-			else if (board[b.getTop().x+b.getLength()][t]!=null){
+			else if (board[b.getTop().x+b.getLength()-1][t]!=null){
 				checkDown = false;
 				
 			}
@@ -165,26 +166,25 @@ public class Board {
 				checkRight= false;
 				break;
 			}
+			 else if(board[t][b.getTop().y+b.getWidth()-1]!=null){
+					checkRight=false;
+				}
 			 else if(b.getTop().y+b.getWidth()==this.BoardWidth){
 				 checkRight= false;
 				 break;
 			 }
-			 else if(board[t][b.getTop().y+b.getWidth()]!=null){
-					checkRight=false;
-				}
-			 
 		}
 		if(checkUp==true){
-			availblock.add(new Point(b.getTop().x-1,b.getTop().y));
+			availblock.add("Up");
 		}
 		if(checkDown==true){
-			availblock.add(new Point(b.getTop().x+1,b.getTop().y));
+			availblock.add("Down");
 		}
 		if(checkLeft==true){
-			availblock.add(new Point(b.getTop().x,b.getTop().y-1));
+			availblock.add("Left");
 		}
 		if(checkRight==true){
-			availblock.add(new Point(b.getTop().x,b.getTop().y+1));
+			availblock.add("Right");
 		}
 		return availblock; 
 	}
