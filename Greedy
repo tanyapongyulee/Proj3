@@ -1,105 +1,77 @@
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Stack;
 
 
-public class aStar {
-	//private ArrayList<Block> evaluated;
-	//private ArrayList<Block> open;
-	//private ArrayList<String> move;
-	private ArrayList<Block> Need;
-	public aStar(){
-		
+public class Greedy {
+	protected ArrayList<Board> moves = new ArrayList<Board>();
+	protected HashSet<Board> seenBoard = new HashSet<Board>();
+	protected Stack<Board> boardStack = new Stack<Board>();
+	protected ArrayList<Block> availBlocks = new ArrayList<Block>();
+	protected Board Goal;
+	public Greedy(Board board, Board goal){
+		boardStack.push(board);
+		availBlocks = board.avail;
+		Goal = goal;
 	}
-	protected Board match(Board goal,Board board){
-		System.out.println(goal.Goal.size());
-		int p = goal.Goal.size();
-		int size = goal.Goal.get(p-1).getSize();//for later use when multiple blocks come into play.
-		boolean d = true;
-		boolean c = true;
-		Board finished=null;
-		while(d){
-			int t =0;
-			while(t<board.getLength()){
-				int k =0 ;
-				while(k<board.getWidth()){
-					if(board.board[t][k].getSize()==size){
-						finished = greedySearch(board.board[t][k],goal.Goal.get(0),board);//sends a block, and a goal block
-						d=false;
-						t=board.getLength();
-						k=board.getWidth();
-				}
-					k++;
+	protected void stackSearch(){
+		while(!boardStack.isEmpty()){
+			Board tempBoard = boardStack.pop();
+			moves.add(tempBoard);
+			seenBoard.add(tempBoard);
+			if(tempBoard.matchGoal(Goal)){
+				return;
 			}
-				
-			}
-			t++;
+			allMoves(tempBoard);
 		}
-		return finished;
+		System.out.println(boardStack.size());
 	}
-	protected static Board greedySearch(Block Start,Block goal,Board board){
-		int current;
-		int h = heuristic(Start.getTop(),goal.getTop());
-		while(!done(Start,goal)){ //keeps moving block until finished
-			ArrayList<Point> avail = board.okayMoves(Start);
-			int temp = h;
-			int i = 0;
-			while(temp==h&&i<avail.size()){ //finds a block with low heuristics
-				//System.out.println(heuristic(avail.get(i),goal.getTop())+" "+avail.get(i)+" "+h);
-				if(h>heuristic(avail.get(i),goal.getTop())){
-					temp = heuristic(avail.get(i),goal.getTop());
-				}
-				i++;
-			}
-			i--;
-			if(h==temp){
-				i=0;
-				while(temp==h&&i<avail.size()){ //finds a block with low heuristics
-					System.out.println(heuristic(avail.get(i),goal.getTop())+" "+avail.get(i)+" "+h);
-					if(h==heuristic(avail.get(i),goal.getTop())){
-						temp = heuristic(avail.get(i),goal.getTop());
-						break;
-					}
-					i++;
+	protected void allMoves(Board board){
+		for(int k =0; k<availBlocks.size()-1;k++){
+			ArrayList<String> temp = board.okayMoves(availBlocks.get(k));
+			System.out.println(temp);
+			Board anotherBoard = board;
+			if(temp.contains("Up")){
+				anotherBoard.moveUp(availBlocks.get(k));
+				boardStack.push(anotherBoard);
+				if(anotherBoard.matchGoal(Goal)){
+					return;
 				}
 			}
-			h= temp;
-			System.out.println(i);
-			int relativeY=avail.get(i).y- Start.getTop().y;//distinguished the position of goal relative to thye goal block
-			int relativeX= avail.get(i).x-Start.getTop().x;
-			if(relativeX<0){
-				board.moveUp(Start);	//bunch of if statements that moves the block closer to goal.
-				if(relativeY<0){
-					board.moveLeft(Start);
-				}
-				else if (relativeY>0){
-					board.moveRight(Start);
+			Board anotherBoard2 = board;
+			if(temp.contains("Down")){
+				anotherBoard2.moveDown(availBlocks.get(k));
+				boardStack.push(anotherBoard2);
+				if(anotherBoard2.matchGoal(Goal)){
+					return;
 				}
 			}
-			else if(relativeX>0){
-				board.moveDown(Start);
-				if(relativeY>0){
-					board.moveRight(Start);
+			Board anotherBoard3 = board;
+			if(temp.contains("Left")){
+				anotherBoard3.moveLeft(availBlocks.get(k));
+				boardStack.push(anotherBoard3);
+				if(anotherBoard3.matchGoal(Goal)){
+					return;
 				}
-				else if (relativeY<0){
-					board.moveLeft(Start);
+			}
+			Board anotherBoard4 = board;
+			if(temp.contains("Right")){
+				anotherBoard4.moveRight(availBlocks.get(k));
+				boardStack.push(anotherBoard4);
+				if(anotherBoard4.matchGoal(Goal)){
+					return;
 				}
 			}
-			else if(relativeY>0){
-				board.moveRight(Start);
-			}
-			else if(relativeX==0){
-				board.moveLeft(Start);
-			}
-		board.printBoard();
 		}
-		return board;
 	}
-	private static boolean done(Block Start, Block goal){ //checks if done
-		if(Start.getTop().x==goal.getTop().x&&Start.getTop().y==goal.getTop().y){
-			return true;
+	
+	protected void printAnswer(){
+		for(int k =0; k<moves.size();k++){
+			moves.get(k).printBoard();
 		}
-		return false;
 	}
+
 	protected static int heuristic(Point Start, Point goal){ //the heuristic
 		int h = (int)Math.sqrt(Math.pow(goal.x-Start.x, 2)+Math.pow(goal.y-Start.y, 2));
 		return h;
