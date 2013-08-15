@@ -1,0 +1,37 @@
+import static org.junit.Assert.*;
+
+import org.junit.Test;
+
+
+public class GreedyTest {
+
+  @Test
+	public void testHeuristic() {
+		Board c = new Board("supersimple.txt");
+		c.buildBoard();
+		c.placeBlocks();
+		
+		
+		Board d = new Board("supersimple goal.txt",c.getLength(),c.getWidth());
+		Greedy a = new Greedy(c,d);
+		
+		assertTrue(true);
+		//a.printAnswer();
+		
+		Board c2 = new Board("medium.txt");
+		c2.buildBoard();
+		c2.placeBlocks();
+		//c2.printBoard();
+		
+		
+		Board d2 = new Board("medium goal.txt",c.getLength(),c.getWidth());
+		Greedy a2 = new Greedy(c2,d2);
+		a2.stackSearch();
+		
+		assertTrue(true);
+		//a2.printAnswer();
+
+	}
+	
+
+}
