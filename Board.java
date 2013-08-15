@@ -1,3 +1,4 @@
+
 import java.awt.List;
 import java.awt.Point;
 import java.util.ArrayList;
@@ -22,7 +23,7 @@ public class Board {
 		BoardWidth=BWidth;
 		board= new Block[BoardLength][BoardWidth];
 		file= new InputSource(fileName);
-		placeGoalBlocks();	
+		placeBlocks();	
 	}
 	public void buildBoard(){   //returns a 2d array of block objects all initialized to empty. 
 		String s =file.readLine();
@@ -51,7 +52,7 @@ public class Board {
 			int value4=Integer.parseInt(v[3]);
 			int w1 =value4-value2;
 			int l1 =value3-value1;
-			Block b= new Block(w1,l1);
+			Block b= new Block(w1,l1,value1,value2);
 			avail.add(b);
 			b.setTop(value1,value2);
 			b.setBottom(value3,value4);
@@ -129,7 +130,7 @@ public class Board {
 			if(b.getTop().x==0){
 				checkUp=false;
 			}
-			else if(board[b.getTop().x-1][t]!=null){
+			else if(board[b.getTop().x][t]!=null){
 				checkUp=false;
 				break;
 				
@@ -145,7 +146,7 @@ public class Board {
 				 checkDown = false;
 				 break;
 			 }
-			else if (board[b.getTop().x+b.getLength()-1][t]!=null){
+			else if (board[b.getTop().x+b.getLength()][t]!=null){
 				checkDown = false;
 				
 			}
@@ -155,7 +156,7 @@ public class Board {
 				checkLeft = false;
 			}
 			
-			else if(board[t][b.getTop().y-1]!=null){
+			else if(board[t][b.getTop().y]!=null){
 				checkLeft=false;
 			}
 			
@@ -165,14 +166,16 @@ public class Board {
 				checkLeft= false;
 				checkRight= false;
 				break;
-			}
-			 else if(board[t][b.getTop().y+b.getWidth()-1]!=null){
+			 }
+				 else if(b.getTop().y+b.getWidth()==this.BoardWidth){
+					 checkRight= false;
+					 break;
+				 }
+			
+			 else if(board[t][b.getTop().y+b.getWidth()]!=null){
 					checkRight=false;
 				}
-			 else if(b.getTop().y+b.getWidth()==this.BoardWidth){
-				 checkRight= false;
-				 break;
-			 }
+			
 		}
 		if(checkUp==true){
 			availblock.add("Up");
@@ -186,6 +189,7 @@ public class Board {
 		if(checkRight==true){
 			availblock.add("Right");
 		}
+		System.out.println(checkUp+" "+checkDown+" "+checkLeft+" "+checkRight);
 		return availblock; 
 	}
 
@@ -299,24 +303,24 @@ public class Board {
 
 
 	public boolean matchGoal(Board goal){
-		HashMap<Integer, Block> compare = new HashMap<Integer,Block>();
+		ArrayList<Block> compare = new ArrayList<Block>();
 		int count = 0;
 		for (int k = 0; k<this.BoardLength; k++){
 			for (int j = 0; j<this.BoardWidth; j++){
 				Block block = this.board[k][j];
-				if(block!=null){
-					compare.put((Integer)(10*k+j), block);
-					System.out.println(compare.get(10*k+j));
+				if(block!=null&&!compare.contains(block)){
+					compare.add(block);
 				}
 			}
 		}
 
 		for (int i = 0; i<goal.BoardLength; i++){
 			for (int r = 0; r<goal.BoardWidth; r++){
-				Block blocktwo = goal.board[i][r];
-				if(blocktwo!=null){
+				Block blockTwo = goal.board[i][r];
+				if(blockTwo!=null){
 					count ++;
-					if (compare.get(10*i+r).Top.equals(blocktwo.Top) && compare.get(10*i+r).Bottom.equals(blocktwo.Bottom)){
+					//System.out.println(compare);
+					if (compare.contains(blockTwo)){
 						count--;
 					}
 				}
