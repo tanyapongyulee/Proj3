@@ -1,5 +1,6 @@
 import static org.junit.Assert.*;
 
+import java.awt.Point;
 import java.util.ArrayList;
 
 import junit.framework.TestCase;
@@ -177,20 +178,81 @@ public class BoardTest extends TestCase {
 		assertTrue(l2.get(2)=="Right");
 	
 	}
+	
+	
 	public void testCopyBoard(){
-		Board b1=new Board("dads");
+		System.out.println("Testing CopyBoard.");   
+		Board b1=new Board("1x1.txt");   // checking one-block-board copy
 		b1.buildBoard();
 		b1.placeBlocks();
 		Board b1copy=b1.copyBoard();
-		//String s1=b1.printBoard();
-		b1copy.printBoard()
-		assertEquals(,b1copy.printBoard());
+		for(int k=0;k<b1.getLength();k++){
+			for(int j=0;j<b1.getWidth();j++){
+				Point p1=b1.board[k][j].getTop();
+				Point copyp1=b1copy.board[k][j].getTop();
+				assertEquals(p1,copyp1);    
+			}
+		}
 		
-		// empty;
-		// fullblock
+		Board b2=new Board("dads");
+		b2.buildBoard();
+		b2.placeBlocks();
+		Board b2copy=b2.copyBoard();
+		b2.printBoard();
+		b2copy.printBoard();
+		//System.out.println(b2.getLength());
+		//System.out.println(b2.getWidth()); 
+		assertEquals(b2.getLength(),b2copy.getLength());  //testing length
+		assertEquals(b2.getLength(),b2copy.getLength());  // testing width
+		//assertEquals(b2.avail.get(0),b2copy.avail.get(0)); // testing saved avail blocks
+		for(int k=0;k<b2.getLength();k++){
+			for(int j=0;j<b2.getWidth();j++){
+				if(b2.board[k][j]!=null){
+					Point p2=b2.board[k][j].getTop();
+					Point copyp2=b2copy.board[k][j].getTop();
+					assertEquals(p2,copyp2);    //checking each block
+				}
+			}
+		}
+		b2.moveUp(b2.board[3][1]);
+		assertTrue(b2copy.board[2][1]==null);         // checking moving a block in the original board doesn't affect the copy board
+		
+		b2copy.moveUp(b2copy.board[3][1]);		      // checking moving a block in the copy board doesn't affect the original board
+		for(int k=0;k<b2.getLength();k++){
+			for(int j=0;j<b2.getWidth();j++){
+				if(b2.board[k][j]!=null){
+				Point p2=b2.board[k][j].getTop();
+				Point copyp2=b2copy.board[k][j].getTop();
+				assertEquals(p2,copyp2);    //checking each block
+				}else{
+					assertEquals(b2copy.board[k][j], null);
+				}
+			}
+		}
+		
+		Board b3=new Board("empty.txt");   // checking one-block-board copy
+		b3.buildBoard();
+		b3.placeBlocks();
+		Board b3copy=b3.copyBoard();
+		for(int k=0;k<b1.getLength();k++){
+			for(int j=0;j<b1.getWidth();j++){
+				if(b3.board[k][j]!=null){
+				Point p=b1.board[k][j].getTop();
+				Point copyp=b1copy.board[k][j].getTop();
+				assertEquals(p,copyp); 
+				}else{
+					assertEquals(b3copy.board[k][j], null);    
+				}
+			}
+		}
+		
+		
+		
+		
 		
 		
 	}
+	
 	
 	
 	
