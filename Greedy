@@ -12,22 +12,25 @@ public class Greedy {
 	protected Stack<Board> boardStack = new Stack<Board>();
 	protected ArrayList<Block> availBlocks = new ArrayList<Block>();
 	protected Board Goal;
+	protected Board Original; //new
 	public Greedy(Board board, Board goal){
+		Original=board;
 		boardStack.push(board);
 		availBlocks = board.avail;
 		Goal = goal;
 	}
 	protected void stackSearch(){
-		while(!boardStack.isEmpty()){
-			Board tempBoard = boardStack.pop();
-			moves.add(tempBoard);
-			seenBoard.add(tempBoard);
-			if(tempBoard.matchGoal(Goal)){
-				return;
-			}
-			allMoves(tempBoard);
-		}
-		System.out.println(boardStack.size());
+        while(!boardStack.isEmpty()){
+            Board tempBoard = boardStack.pop();
+            moves.add(tempBoard);
+            seenBoard.add(tempBoard);
+            if(matchGoal(tempBoard, Goal)){
+                return;
+            }
+            allMoves(tempBoard);
+        }
+		//System.out.println(boardStack.size());
+		System.out.println("Solution Found!");   //new
 	}
 	protected void allMoves(Board board){
 		for(int k =0; k<availBlocks.size()-1;k++){
@@ -40,7 +43,7 @@ public class Greedy {
 				if(!seenBoard.contains(anotherBoard)){       // check if board has seen
 					boardStack.push(anotherBoard);
 					savedMoves(anotherBoard,availBlocks.get(k),"Up"); //save the move
-					if(anotherBoard.matchGoal(Goal)){
+					if(matchGoal(anotherBoard,Goal)){
 						return;
 					}		
 				}
@@ -51,7 +54,7 @@ public class Greedy {
 				if(!seenBoard.contains(anotherBoard)){       // check if board has seen
 					boardStack.push(anotherBoard);
 					savedMoves(anotherBoard,availBlocks.get(k),"Down"); //save the move
-					if(anotherBoard.matchGoal(Goal)){
+					if(matchGoal(anotherBoard2,Goal)){
 						return;
 					}	
 				}
@@ -62,7 +65,7 @@ public class Greedy {
 				if(!seenBoard.contains(anotherBoard)){       // check if board has seen
 					boardStack.push(anotherBoard);
 					savedMoves(anotherBoard,availBlocks.get(k),"Left"); //save the move
-					if(anotherBoard.matchGoal(Goal)){
+					if(matchGoal(anotherBoard3,Goal)){
 						return;
 					}
 				}
@@ -73,7 +76,7 @@ public class Greedy {
 				if(!seenBoard.contains(anotherBoard)){       // check if board has seen
 					boardStack.push(anotherBoard);
 					savedMoves(anotherBoard,availBlocks.get(k),"Down"); //save the move
-					if(anotherBoard.matchGoal(Goal)){
+					if(matchGoal(anotherBoard4,Goal)){
 						return;
 					}
 				}
@@ -101,25 +104,48 @@ public class Greedy {
 		PrintableMoves.put(board, str);
 	}
 	protected void printAnswer(){
-		for(int k =0; k<moves.size();k++){
-			PrintableMoves.get(moves.get(k));
+		for(int k =1; k<moves.size();k++){
+			String s=PrintableMoves.get(moves.get(k));
+			System.out.println(s);
 		}
 	}
 	
 	
 	protected boolean possible(){  //edit
-		boolean result=false;
+		boolean result=true;
 		if(availBlocks.size()==0){
-			result=false;
+			result=true;
 		}
+		
 		
 		return result;
 	}
 
-	protected static int heuristic(Point Start, Point goal){ //the heuristic
-		int h = (int)Math.sqrt(Math.pow(goal.x-Start.x, 2)+Math.pow(goal.y-Start.y, 2));
-		return h;
-	}
-	
+    protected static int heuristic(Point Start, Point goal){ //the heuristic
+        int h = (int)Math.sqrt(Math.pow(goal.x-Start.x, 2)+Math.pow(goal.y-Start.y, 2));
+        return h;
+    }
+    public boolean matchGoal(Board board, Board goal){
+        ArrayList<Block> compare = new ArrayList<Block>();
+        int count =0;
+        for(int k =0; k<goal.avail.size();k++){
+            for(int g =0; g<board.avail.size();){
+                if(board.avail.get(g).getSize()==goal.avail.get(k).getSize()&&board.avail.get(g).Top.equals(goal.avail.get(k).Top)){
+                    g= board.avail.size();
+                    count++;
+                }
+            }
+        }
+        System.out.println(count+" "+goal.avail.size());
+        if (count==goal.avail.size()){
+            return true;
+        } else{
+            return false;
+        }
+
+
+    }
+
+    
 
 }
