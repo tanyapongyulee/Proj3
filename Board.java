@@ -13,7 +13,7 @@ public class Board {
     private int BoardWidth;    
     private HashSet<Point> availMove;
     protected ArrayList<Block> Goal = new ArrayList<Block>();;
-    protected ArrayList<Block> avail = new ArrayList<Block>();
+    protected ArrayList<Block> avail = new ArrayList<Block>();  //adding all avail block to move
 
     public Board(String fileName){
          file=new InputSource(fileName);    //initializes the file name.    
@@ -22,6 +22,7 @@ public class Board {
         BoardLength=length;
         BoardWidth=width;
         board = new Block[BoardLength][BoardWidth];
+        file=null;
     }
     public Board(String fileName, int BLength, int BWidth){ // construct goal-board, skipping other construct board methods
         BoardLength=BLength;
@@ -50,11 +51,11 @@ public class Board {
         Board newBoard = new Board(BoardLength,BoardWidth);
         System.out.println(avail.size());
         for(int k =0; k<avail.size();k++){
-            Block c = new Block(avail.get(k).getLength(),avail.get(k).getWidth());
+            Block c = new Block(avail.get(k).getWidth(),avail.get(k).getLength()); //ok
             c.setTop(avail.get(k).getTop().x, avail.get(k).getTop().y);
-            c.setBottom(avail.get(k).getBottom().x, avail.get(k).getBottom().y);
-            for(int g =avail.get(k).getTop().x; g<avail.get(k).getTop().x+avail.get(k).getLength();g++){
-                for(int h = avail.get(k).getTop().y; h<avail.get(k).getWidth()+avail.get(k).getTop().y;h++){
+            c.setBottom(avail.get(k).getBottom().x, avail.get(k).getBottom().y); //ok
+            for(int g =avail.get(k).getTop().x; g<avail.get(k).getBottom().x+1;g++){
+                for(int h = avail.get(k).getTop().y; h<avail.get(k).getBottom().y+1;h++){
                         newBoard.board[g][h]=c;
                 }
             }
