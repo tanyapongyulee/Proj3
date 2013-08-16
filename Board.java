@@ -286,15 +286,7 @@ public class Board {
 		} return max;
 
 	}
-	public int h_value(Block b){
-		return 0;
-	}
-	public int g_value(Block b){
-		return 0;
-	}
-	public int f_value(Block b){
-		return h_value(b)+g_value(b);
-	}
+
 
 	
 
