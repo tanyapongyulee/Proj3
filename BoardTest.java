@@ -115,7 +115,7 @@ public class BoardTest extends TestCase {
 		Board bSame=new Board("easy.txt");
 		bSame.buildBoard();
 		bSame.placeBlocks();	
-		assertTrue(b1.matchGoal(bSame));
+		//assertTrue(b1.matchGoal(bSame));
 
 	}
 	
@@ -135,10 +135,10 @@ public class BoardTest extends TestCase {
 		assertTrue(list4.size()==0);
 		list5= b1.okayMoves(b1.board[3][2]); //random middle
 		assertTrue(list5.size()==0);
-		list6= b1.okayMoves(b1.board[3][1]); //random middle
+		list6= b1.okayMoves(b1.board[3][1]); //random middle, checking Up
 		assertTrue(list6.size()==1);
 		assertTrue(list6.get(0)=="Up");
-		list7= b1.okayMoves(b1.board[2][3]); //random middle
+		list7= b1.okayMoves(b1.board[2][3]); //random middle, checking Left
 		assertTrue(list7.size()==1);
 		assertTrue(list7.get(0)=="Left");
 		
@@ -147,15 +147,15 @@ public class BoardTest extends TestCase {
 		b2.buildBoard();
 		b2.placeBlocks();
 		b2.printBoard();
-		ArrayList list11,list22,list33, list44, list55, list66;
+		ArrayList list11,list22,list33, list44;
 		list11= b2.okayMoves(b2.board[0][0]); //corner top-left
 		assertTrue(list11.size()==0);
 		list22= b2.okayMoves(b2.board[0][3]); //corner top-right
 		assertTrue(list22.size()==0);
-		list33= b2.okayMoves(b2.board[4][1]); 
+		list33= b2.okayMoves(b2.board[4][1]); //checking Right
 		assertTrue(list33.size()==1);
 		assertTrue(list33.get(0)=="Right");
-		list44= b2.okayMoves(b2.board[3][3]); 
+		list44= b2.okayMoves(b2.board[3][3]); // checking Down
 		assertTrue(list44.size()==1);
 		assertTrue(list44.get(0)=="Down");
 		
@@ -164,19 +164,34 @@ public class BoardTest extends TestCase {
 		b3.placeBlocks();
 		b3.printBoard();
 		ArrayList l1,l2;
-		l1= b3.okayMoves(b3.board[2][2]); 
+		l1= b3.okayMoves(b3.board[2][2]);  // checking multiple moves
 		System.out.print(l1.size());
 		assertTrue(l1.size()==3);
 		assertTrue(l1.get(0)=="Up");
 		assertTrue(l1.get(1)=="Down");
 		assertTrue(l1.get(2)=="Left");
-		l2= b3.okayMoves(b3.board[1][3]); 
+		l2= b3.okayMoves(b3.board[1][3]); // checking multiple moves
 		assertTrue(l2.size()==3);
 		assertTrue(l2.get(0)=="Up");
 		assertTrue(l2.get(1)=="Down");
 		assertTrue(l2.get(2)=="Right");
 	
 	}
+	public void testCopyBoard(){
+		Board b1=new Board("dads");
+		b1.buildBoard();
+		b1.placeBlocks();
+		Board b1copy=b1.copyBoard();
+		//String s1=b1.printBoard();
+		b1copy.printBoard()
+		assertEquals(,b1copy.printBoard());
+		
+		// empty;
+		// fullblock
+		
+		
+	}
+	
 	
 	
 	
