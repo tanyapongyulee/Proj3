@@ -51,9 +51,10 @@ public class Board {
         Board newBoard = new Board(BoardLength,BoardWidth);
         System.out.println(avail.size());
         for(int k =0; k<avail.size();k++){
-            Block c = new Block(avail.get(k).getWidth(),avail.get(k).getLength()); //ok
+            Block c = new Block(avail.get(k).getWidth(),avail.get(k).getLength()); 
             c.setTop(avail.get(k).getTop().x, avail.get(k).getTop().y);
-            c.setBottom(avail.get(k).getBottom().x, avail.get(k).getBottom().y); //ok
+            c.setBottom(avail.get(k).getBottom().x, avail.get(k).getBottom().y); 
+            newBoard.avail.add(c);
             for(int g =avail.get(k).getTop().x; g<avail.get(k).getBottom().x+1;g++){
                 for(int h = avail.get(k).getTop().y; h<avail.get(k).getBottom().y+1;h++){
                         newBoard.board[g][h]=c;
