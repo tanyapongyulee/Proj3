@@ -51,7 +51,7 @@ public class Board {
 			int value4=Integer.parseInt(v[3]);
 			int w1 =value4-value2;
 			int l1 =value3-value1;
-			Block b= new Block(w1,l1,value1,value2);
+			Block b= new Block(w1,l1);
 			avail.add(b);
 			b.setTop(value1,value2);
 			b.setBottom(value3,value4);
