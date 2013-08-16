@@ -105,20 +105,8 @@ public class BoardTest extends TestCase {
 		System.out.println("End of testMoveLeft.");
 		System.out.println("-------------------");
 	}
-	public void GoalBlocks(){
-		Board b1=new Board("easy.txt");
-		
-	}
-	public void testMatchGoal(){
-		Board b1=new Board("easy.txt");
-		b1.buildBoard();
-		b1.placeBlocks();
-		Board bSame=new Board("easy.txt");
-		bSame.buildBoard();
-		bSame.placeBlocks();	
-		//assertTrue(b1.matchGoal(bSame));
-
-	}
+	
+	
 	
 	public void testMovesOkay(){
 		Board b1=new Board("dads");
