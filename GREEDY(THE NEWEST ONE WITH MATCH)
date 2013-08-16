@@ -1,0 +1,106 @@
+import java.awt.Point;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Stack;
+
+
+public class Greedy {
+    protected ArrayList<Board> moves = new ArrayList<Board>();
+    protected HashSet<Board> seenBoard = new HashSet<Board>();
+    protected Stack<Board> boardStack = new Stack<Board>();
+    protected ArrayList<Block> availBlocks = new ArrayList<Block>();
+    protected Board Goal;
+    public Greedy(Board board, Board goal){
+        boardStack.push(board);
+        availBlocks = board.avail;
+        Goal = goal;
+    }
+    protected void stackSearch(){
+        while(!boardStack.isEmpty()){
+            Board tempBoard = boardStack.pop();
+            moves.add(tempBoard);
+            seenBoard.add(tempBoard);
+            if(matchGoal(tempBoard, Goal)){
+                return;
+            }
+            allMoves(tempBoard);
+        }
+        System.out.println(boardStack.size());
+    }
+    protected void allMoves(Board board){
+        for(int k =0; k<availBlocks.size();k++){
+            ArrayList<String> temp = board.okayMoves(availBlocks.get(k));
+            Board anotherBoard = board.copyBoard();
+            anotherBoard.printBoard();
+            if(temp.contains("Up")){
+                anotherBoard.moveUp(availBlocks.get(k));
+                boardStack.push(anotherBoard);
+                if(matchGoal(anotherBoard,Goal)){
+                    return;
+                }
+            }
+            Board anotherBoard2 = board.copyBoard();
+            if(temp.contains("Down")){
+                anotherBoard2.moveDown(availBlocks.get(k));
+                boardStack.push(anotherBoard2);
+               // anotherBoard2.printBoard();
+                if(matchGoal(anotherBoard2,Goal)){
+                    return;
+                }
+            }
+            Board anotherBoard3 = board.copyBoard();
+            if(temp.contains("Left")){
+                anotherBoard3.moveLeft(availBlocks.get(k));
+                boardStack.push(anotherBoard3);
+                if(matchGoal(anotherBoard3,Goal)){
+                    return;
+                }
+            }
+            Board anotherBoard4 = board.copyBoard();
+            if(temp.contains("Right")){
+                anotherBoard4.moveRight(availBlocks.get(k));
+                boardStack.push(anotherBoard4);
+                if(matchGoal(anotherBoard4,Goal)){
+                    return;
+                }
+            }
+        }
+    }
+    
+    protected void printAnswer(){
+        System.out.println(moves);
+        for(int k =0; k<moves.size();k++){
+            moves.get(k).printBoard();
+        }
+    }
+
+    protected static int heuristic(Point Start, Point goal){ //the heuristic
+        int h = (int)Math.sqrt(Math.pow(goal.x-Start.x, 2)+Math.pow(goal.y-Start.y, 2));
+        return h;
+    }
+    public boolean matchGoal(Board board, Board goal){
+        ArrayList<Block> compare = new ArrayList<Block>();
+        HashSet<Block> alreadyChecked = new HashSet<Block>();
+        int count =0;
+        for(int k =0; k<goal.avail.size();k++){
+            for(int g =0; g<board.avail.size();g++){
+                if(board.avail.get(g).equals(goal.avail.get(k))&&!alreadyChecked.contains(board.avail.get(g))){
+                    g= board.avail.size();
+                    count++;
+                }
+                if(g!= board.avail.size()){
+                alreadyChecked.add(board.avail.get(g));
+                }
+            }
+        }
+        System.out.println(count+" "+goal.avail.size());
+        if (count==goal.avail.size()){
+            return true;
+        } else{
+            return false;
+        }
+
+
+    }
+
+    }
