@@ -1,4 +1,3 @@
-
 import java.awt.List;
 import java.awt.Point;
 import java.util.ArrayList;
@@ -123,14 +122,14 @@ public class Board {
 		return size;
 	}
 
-	public ArrayList<String> okayMoves(Block b){ // update the avail coordinates for a specific block to move.	
+	public ArrayList<String> okayMoves(Block b){ // it's working. 
 		boolean checkUp=true, checkDown=true, checkLeft=true, checkRight=true;
 		ArrayList <String> availblock= new ArrayList<String>();
 		for (int t=b.getTop().y;t<b.getWidth()+b.getTop().y;t++){ // up	
 			if(b.getTop().x==0){
 				checkUp=false;
 			}
-			else if(board[b.getTop().x][t]!=null){
+			else if(board[b.getTop().x-1][t]!=null){
 				checkUp=false;
 				break;
 				
@@ -156,7 +155,7 @@ public class Board {
 				checkLeft = false;
 			}
 			
-			else if(board[t][b.getTop().y]!=null){
+			else if(board[t][b.getTop().y-1]!=null){
 				checkLeft=false;
 			}
 			
@@ -192,7 +191,6 @@ public class Board {
 		System.out.println(checkUp+" "+checkDown+" "+checkLeft+" "+checkRight);
 		return availblock; 
 	}
-
 
 	public void moveUp(Block b){		
 		Point newTop=new Point(b.Top.x-1,b.Top.y);//x's are y's we NEED TO CHANGE THAT. IT IS UNINTUITIVE. 
