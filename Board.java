@@ -191,7 +191,6 @@ public class Board {
 		System.out.println(checkUp+" "+checkDown+" "+checkLeft+" "+checkRight);
 		return availblock; 
 	}
-
 	public void moveUp(Block b){		
 		Point newTop=new Point(b.Top.x-1,b.Top.y);//x's are y's we NEED TO CHANGE THAT. IT IS UNINTUITIVE. 
 		Point newBottom=new Point(b.Bottom.x-1,b.Bottom.y);
